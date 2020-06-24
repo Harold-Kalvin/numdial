@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scripts/shaders/grad_shadow.shader" type="Shader" id=1]
+[ext_resource path="res://assets/shapes/oval.png" type="Texture" id=2]
+[ext_resource path="res://gradients/red.tres" type="Texture" id=3]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 1 )
+shader_param/shadow_modulate = Color( 0.176471, 0.176471, 0.176471, 0.392157 )
+shader_param/shadow_offset = Vector2( 30, 30 )
+shader_param/shadow_radius = 2.0
+shader_param/gradient = ExtResource( 3 )
+
+[node name="NumButton" type="Node2D"]
+
+[node name="BackCircle" type="Sprite" parent="."]
+material = SubResource( 1 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 2 )
+
+[node name="MiddleCircle" type="Sprite" parent="."]
+material = SubResource( 1 )
+scale = Vector2( 0.32, 0.32 )
+texture = ExtResource( 2 )
+
+[node name="FrontCircle" type="Sprite" parent="."]
+material = SubResource( 1 )
+scale = Vector2( 0.24, 0.24 )
+texture = ExtResource( 2 )
