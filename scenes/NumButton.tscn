@@ -74,3 +74,5 @@ __meta__ = {
 
 [node name="ClickAreaShape" type="CollisionShape2D" parent="ClickArea"]
 shape = SubResource( 5 )
+
+[node name="FrontCircleScaleTween" type="Tween" parent="."]

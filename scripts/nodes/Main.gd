@@ -12,4 +12,4 @@ func _ready():
 
 
 func _on_num_button_pressed(button):
-    print("pressed ", button)
+    button.animate_click()
