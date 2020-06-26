@@ -71,6 +71,8 @@ __meta__ = {
 }
 
 [node name="ClickArea" type="Area2D" parent="."]
+monitoring = false
+monitorable = false
 
 [node name="ClickAreaShape" type="CollisionShape2D" parent="ClickArea"]
 shape = SubResource( 5 )

@@ -29,7 +29,7 @@ void fragment() {
     // shadow
     vec2 ps = TEXTURE_PIXEL_SIZE;
     vec2 pos_with_offset = UV - shadow_offset * ps;
-	vec4 shadow = vec4(shadow_modulate.rgb, texture(TEXTURE, pos_with_offset).a * 0.0);
+    vec4 shadow = vec4(shadow_modulate.rgb, texture(TEXTURE, pos_with_offset).a * 0.0);
     shadow += vec4(shadow_modulate.rgb, texture(TEXTURE, pos_with_offset + ps * vec2(shadow_radius*-30.0, shadow_radius*-30.0)).a * shadow_modulate.a) * 0.001479;
     shadow += vec4(shadow_modulate.rgb, texture(TEXTURE, pos_with_offset + ps * vec2(shadow_radius*-29.0, shadow_radius*-29.0)).a * shadow_modulate.a) * 0.001815;
     shadow += vec4(shadow_modulate.rgb, texture(TEXTURE, pos_with_offset + ps * vec2(shadow_radius*-28.0, shadow_radius*-28.0)).a * shadow_modulate.a) * 0.002212;
