@@ -1,36 +1,29 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://scripts/shaders/grad_shadow.shader" type="Shader" id=1]
+[ext_resource path="res://scripts/shaders/gradient.shader" type="Shader" id=1]
 [ext_resource path="res://assets/shapes/oval.png" type="Texture" id=2]
-[ext_resource path="res://gradients/red3.tres" type="Texture" id=3]
-[ext_resource path="res://gradients/red1.tres" type="Texture" id=4]
-[ext_resource path="res://gradients/red2.tres" type="Texture" id=5]
+[ext_resource path="res://gradients/red1.tres" type="Texture" id=3]
+[ext_resource path="res://gradients/red2.tres" type="Texture" id=4]
+[ext_resource path="res://gradients/red3.tres" type="Texture" id=5]
 [ext_resource path="res://assets/fonts/BebasNeue-Regular.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://scripts/nodes/NumButton.gd" type="Script" id=7]
+[ext_resource path="res://assets/shadows/oval_shadow1.png" type="Texture" id=8]
+[ext_resource path="res://assets/shadows/oval_shadow2.png" type="Texture" id=9]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
 shader = ExtResource( 1 )
-shader_param/shadow_modulate = Color( 0.117647, 0.117647, 0.117647, 0.313726 )
-shader_param/shadow_offset = Vector2( 30, 30 )
-shader_param/shadow_radius = 2.0
-shader_param/gradient = ExtResource( 4 )
+shader_param/gradient = ExtResource( 3 )
 
 [sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
 shader = ExtResource( 1 )
-shader_param/shadow_modulate = Color( 0.117647, 0.117647, 0.117647, 0.313726 )
-shader_param/shadow_offset = Vector2( 30, 30 )
-shader_param/shadow_radius = 2.5
-shader_param/gradient = ExtResource( 5 )
+shader_param/gradient = ExtResource( 4 )
 
 [sub_resource type="ShaderMaterial" id=3]
 resource_local_to_scene = true
 shader = ExtResource( 1 )
-shader_param/shadow_modulate = Color( 0.117647, 0.117647, 0.117647, 0.352941 )
-shader_param/shadow_offset = Vector2( 30, 30 )
-shader_param/shadow_radius = 2.5
-shader_param/gradient = ExtResource( 3 )
+shader_param/gradient = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=4]
 resource_local_to_scene = true
@@ -51,10 +44,18 @@ material = SubResource( 1 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 2 )
 
+[node name="MiddleShadow" type="Sprite" parent="."]
+scale = Vector2( 0.51, 0.51 )
+texture = ExtResource( 8 )
+
 [node name="MiddleCircle" type="Sprite" parent="."]
 material = SubResource( 2 )
 scale = Vector2( 0.32, 0.32 )
 texture = ExtResource( 2 )
+
+[node name="FrontShadow" type="Sprite" parent="."]
+scale = Vector2( 0.41, 0.41 )
+texture = ExtResource( 9 )
 
 [node name="FrontCircle" type="Sprite" parent="."]
 material = SubResource( 3 )
