@@ -2,7 +2,7 @@ extends Node2D
 
 signal pressed
 
-var num_str = ""
+var num = 0
 var animating = false
 
 
@@ -13,12 +13,12 @@ func _ready():
     set_num_position()
 
 
-func init(num):
-    num_str = str(num)
+func init(num_arg):
+    num = num_arg
 
 
 func set_num():
-    $Num.text = num_str
+    $Num.text = str(num)
 
 
 func set_num_position():

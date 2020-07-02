@@ -1,9 +1,26 @@
 extends Node2D
 
 const NUMBER_CHOICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-const BUTTON_SPRITE_WIDTH = 512 * 0.4 # margins included
+const CIRCLE_RADIUS = 256
+const CIRCLE_PER_WIDTH = 5
+const CIRCLE_OFFSET_FACTOR = 1.4
 
 var num_button = preload("res://scenes/NumButton.tscn")
+var screen_size = Vector2()
+var scaled_radius
+var number_choices = []
+var color_for_number = {
+    0: "pink",
+    1: "red",
+    2: "orange",
+    3: "yellow",
+    4: "blue",
+    5: "light_green",
+    6: "light_violet",
+    7: "green",
+    8: "violet",
+    9: "turquoise",
+}
 var gradients = {
     "pink": {
         1: preload("res://gradients/pink1.tres"),
@@ -56,54 +73,46 @@ var gradients = {
         3: preload("res://gradients/turquoise3.tres"),
     },
 }
-var screen_size
-var number_choices = []
-var color_for_number = {
-    0: "pink",
-    1: "red",
-    2: "orange",
-    3: "yellow",
-    4: "blue",
-    5: "light_green",
-    6: "light_violet",
-    7: "green",
-    8: "violet",
-    9: "turquoise",
-}
 
 
 func _ready():
     randomize()
     screen_size = get_viewport().get_visible_rect().size
+    scaled_radius = screen_size.x / CIRCLE_PER_WIDTH
     create_num_buttons()
 
 
 func create_num_button(num, position):
     var button = num_button.instance()
-    button.position = position
     button.init(num)
-    button.connect("pressed", self, "_on_num_button_pressed")
+    button.position = position
+    # scale
+    var scale_component = scaled_radius / CIRCLE_RADIUS
+    button.set_scale(Vector2(scale_component, scale_component))
     # set color corresponding to the number
     var color = color_for_number[num]
     button.get_node("BackCircle").material.set_shader_param("gradient", gradients[color][1])
     button.get_node("MiddleCircle").material.set_shader_param("gradient", gradients[color][2])
     button.get_node("FrontCircle").material.set_shader_param("gradient", gradients[color][3])
+    # signal
+    button.connect("pressed", self, "_on_num_button_pressed")
     add_child(button)
 
 
 func create_num_buttons():
     number_choices += NUMBER_CHOICES
     number_choices.shuffle()
-    var pos = Vector2(screen_size.x / 2, screen_size.y / 2 - BUTTON_SPRITE_WIDTH / 2)
+    var offset = scaled_radius * CIRCLE_OFFSET_FACTOR
+    var pos = Vector2(screen_size.x / 2, screen_size.y / 2 - offset / 2)
     for i in range(number_choices.size()):
         if i == 4:
-            pos.x = screen_size.x / 2 - BUTTON_SPRITE_WIDTH
+            pos.x = screen_size.x / 2 - offset
             pos.y = screen_size.y / 2
         elif i == 7:
-            pos.x = screen_size.x / 2 + BUTTON_SPRITE_WIDTH
+            pos.x = screen_size.x / 2 + offset
             pos.y = screen_size.y / 2
         create_num_button(number_choices[i], pos)
-        pos.y += BUTTON_SPRITE_WIDTH
+        pos.y += offset
 
 
 func _on_num_button_pressed(button):
