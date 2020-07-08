@@ -1,4 +1,4 @@
-extends Node2D
+extends "res://scripts/nodes/aspect_ratio_container/AspectRatioContainer.gd"
 
 const NUMBER_CHOICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const CIRCLE_RADIUS = 256
@@ -6,7 +6,6 @@ const CIRCLE_PER_WIDTH = 5
 const CIRCLE_OFFSET_FACTOR = 1.4
 
 var num_button = preload("res://scenes/NumButton.tscn")
-var screen_size = Vector2()
 var scaled_radius
 var number_choices = []
 var color_for_number = {
@@ -77,8 +76,7 @@ var gradients = {
 
 func _ready():
     randomize()
-    screen_size = get_viewport().get_visible_rect().size
-    scaled_radius = screen_size.x / CIRCLE_PER_WIDTH
+    scaled_radius = size.x / CIRCLE_PER_WIDTH
     create_num_buttons()
 
 
@@ -103,14 +101,14 @@ func create_num_buttons():
     number_choices += NUMBER_CHOICES
     number_choices.shuffle()
     var offset = scaled_radius * CIRCLE_OFFSET_FACTOR
-    var pos = Vector2(screen_size.x / 2, screen_size.y / 2 - offset / 2)
+    var pos = Vector2(size.x / 2, size.y / 2 - offset / 2)
     for i in range(number_choices.size()):
         if i == 4:
-            pos.x = screen_size.x / 2 - offset
-            pos.y = screen_size.y / 2
+            pos.x = size.x / 2 - offset
+            pos.y = size.y / 2
         elif i == 7:
-            pos.x = screen_size.x / 2 + offset
-            pos.y = screen_size.y / 2
+            pos.x = size.x / 2 + offset
+            pos.y = size.y / 2
         create_num_button(number_choices[i], pos)
         pos.y += offset
 
