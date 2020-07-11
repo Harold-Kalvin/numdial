@@ -19,6 +19,10 @@ config/name="Numdial"
 run/main_scene="res://scenes/GamePage.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Screen="*res://scripts/autoloaded/Screen.gd"
+
 [display]
 
 window/size/width=720
