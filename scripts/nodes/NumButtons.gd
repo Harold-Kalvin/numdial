@@ -10,6 +10,8 @@ const CIRCLE_OFFSET_FACTOR = 1.4
 var num_button = preload("res://scenes/NumButton.tscn")
 var scaled_radius
 var number_choices = []
+var buttons = []
+var positions = []
 var color_for_number = {
     0: "pink",
     1: "red",
@@ -82,20 +84,42 @@ func _ready():
     scaled_radius = screen.main_block_size.x / CIRCLE_PER_WIDTH
 
 
-func create_all():
-    number_choices += NUMBER_CHOICES
+func init(total_buttons: int = 10):
+    _generate_all_positions()
+
+    # remove existing buttons
+    if buttons:
+        for button in buttons:
+            button.queue_free()
+        buttons.clear()
+
+    # create buttons
+    number_choices.clear()
+    number_choices += NUMBER_CHOICES.slice(0, total_buttons-1)
     number_choices.shuffle()
-    var offset = scaled_radius * CIRCLE_OFFSET_FACTOR
-    var pos = Vector2(screen.main_block_size.x / 2, screen.main_block_size.y / 2 - offset / 2)
-    for i in range(number_choices.size()):
-        if i == 4:
-            pos.x = screen.main_block_size.x / 2 - offset
-            pos.y = screen.main_block_size.y / 2
-        elif i == 7:
-            pos.x = screen.main_block_size.x / 2 + offset
-            pos.y = screen.main_block_size.y / 2
-        _create_button(number_choices[i], pos)
-        pos.y += offset
+    for i in number_choices.size():
+        buttons.append(_create_button(number_choices[i], positions[i]))
+
+
+func _generate_all_positions():
+    var x_offset = scaled_radius * CIRCLE_OFFSET_FACTOR
+    var x_left = screen.main_block_size.x / 2 - x_offset
+    var x_middle = screen.main_block_size.x / 2
+    var x_right = screen.main_block_size.x / 2 + x_offset
+    var y_offset = x_offset / 2
+    var y_middle = screen.main_block_size.y / 2
+
+    positions.clear()
+    positions.append(Vector2(x_middle, y_middle + y_offset))
+    positions.append(Vector2(x_left, y_middle + y_offset * 2))
+    positions.append(Vector2(x_right, y_middle + y_offset * 2))
+    positions.append(Vector2(x_middle, y_middle + y_offset * 3))
+    positions.append(Vector2(x_left, y_middle))
+    positions.append(Vector2(x_right, y_middle))
+    positions.append(Vector2(x_left, y_middle + y_offset * 4))
+    positions.append(Vector2(x_right, y_middle + y_offset * 4))
+    positions.append(Vector2(x_middle, y_middle - y_offset))
+    positions.append(Vector2(x_middle, y_middle + y_offset * 5))
 
 
 func _create_button(num, position):
@@ -113,6 +137,7 @@ func _create_button(num, position):
     # signal
     button.connect("pressed", self, "_on_button_pressed")
     add_child(button)
+    return button
 
 
 func _on_button_pressed(button):
