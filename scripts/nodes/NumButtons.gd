@@ -1,6 +1,6 @@
 extends Node2D
 
-onready var screen = get_node("/root/Screen")
+onready var screen = $"/root/Screen"
 
 const NUMBER_CHOICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const CIRCLE_RADIUS = 256
@@ -80,10 +80,25 @@ func _ready():
     randomize()
     position = screen.main_block_position
     scaled_radius = screen.main_block_size.x / CIRCLE_PER_WIDTH
-    create_num_buttons()
 
 
-func create_num_button(num, position):
+func create_all():
+    number_choices += NUMBER_CHOICES
+    number_choices.shuffle()
+    var offset = scaled_radius * CIRCLE_OFFSET_FACTOR
+    var pos = Vector2(screen.main_block_size.x / 2, screen.main_block_size.y / 2 - offset / 2)
+    for i in range(number_choices.size()):
+        if i == 4:
+            pos.x = screen.main_block_size.x / 2 - offset
+            pos.y = screen.main_block_size.y / 2
+        elif i == 7:
+            pos.x = screen.main_block_size.x / 2 + offset
+            pos.y = screen.main_block_size.y / 2
+        _create_button(number_choices[i], pos)
+        pos.y += offset
+
+
+func _create_button(num, position):
     var button = num_button.instance()
     button.init(num)
     button.position = position
@@ -96,25 +111,9 @@ func create_num_button(num, position):
     button.get_node("MiddleCircle").material.set_shader_param("gradient", gradients[color][2])
     button.get_node("FrontCircle").material.set_shader_param("gradient", gradients[color][3])
     # signal
-    button.connect("pressed", self, "_on_num_button_pressed")
+    button.connect("pressed", self, "_on_button_pressed")
     add_child(button)
 
 
-func create_num_buttons():
-    number_choices += NUMBER_CHOICES
-    number_choices.shuffle()
-    var offset = scaled_radius * CIRCLE_OFFSET_FACTOR
-    var pos = Vector2(screen.main_block_size.x / 2, screen.main_block_size.y / 2 - offset / 2)
-    for i in range(number_choices.size()):
-        if i == 4:
-            pos.x = screen.main_block_size.x / 2 - offset
-            pos.y = screen.main_block_size.y / 2
-        elif i == 7:
-            pos.x = screen.main_block_size.x / 2 + offset
-            pos.y = screen.main_block_size.y / 2
-        create_num_button(number_choices[i], pos)
-        pos.y += offset
-
-
-func _on_num_button_pressed(button):
+func _on_button_pressed(button):
     button.animate_click()

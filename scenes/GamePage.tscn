@@ -1,13 +1,15 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/Background.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scripts/nodes/GameContainer.gd" type="Script" id=2]
+[ext_resource path="res://scripts/nodes/NumButtons.gd" type="Script" id=2]
 [ext_resource path="res://assets/bg.jpg" type="Texture" id=3]
+[ext_resource path="res://scripts/nodes/GamePage.gd" type="Script" id=5]
 
 [node name="GamePage" type="Node2D"]
+script = ExtResource( 5 )
 
 [node name="GameBackground" parent="." instance=ExtResource( 1 )]
 texture = ExtResource( 3 )
 
-[node name="GameContainer" type="Node2D" parent="."]
+[node name="NumButtons" type="Node2D" parent="."]
 script = ExtResource( 2 )
