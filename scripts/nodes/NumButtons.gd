@@ -105,7 +105,7 @@ func init(total_buttons: int = 10):
         buttons.append(_create_button(number_choices[i], positions[i]))
 
 
-func animate_shuffle():
+func animate_shuffle(buttons_to_inject: int = 0):
     var buttons_clone = [] + buttons
     var button_in_center = null
     var move_duration = 0.5
@@ -119,6 +119,12 @@ func animate_shuffle():
             button_in_center = button
             button_in_center.set_z_index(1)
     yield(get_tree().create_timer(move_duration + wait_before_new_position), "timeout")
+    
+    # inject new buttons if needed
+    if buttons_to_inject > 0:
+        _inject_buttons(buttons_to_inject, shuffle_position)
+        buttons_clone.clear()
+        buttons_clone += buttons
 
     # prepare new positions
     var new_positions = [] + positions.slice(0, buttons.size()-1)
@@ -137,6 +143,13 @@ func animate_shuffle():
         buttons_clone[i].animate_move(new_positions[i], move_duration)
     yield(get_tree().create_timer(move_duration), "timeout")
     button_in_center.set_z_index(0)
+
+
+func _inject_buttons(total: int, position: Vector2):
+    if buttons.size() + total <= NUMBER_CHOICES.size():
+        var new_number_choices = NUMBER_CHOICES.slice(buttons.size(), buttons.size() - 1 + total)
+        for num in new_number_choices:
+            buttons.append(_create_button(num, position))
 
 
 func _generate_all_positions():
