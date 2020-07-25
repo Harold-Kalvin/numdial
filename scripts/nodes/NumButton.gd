@@ -3,12 +3,15 @@ extends Node2D
 signal pressed
 
 var num = 0
-var animating = false
+
+var _default_upscale
+var _default_downscale
 
 
 func _ready():
     $ClickArea.connect("input_event", self, "_on_click_area_input_event")
-
+    _default_upscale = $BackCircle.scale
+    _default_downscale = $FrontCircle.scale
     set_num()
     set_num_position()
 
@@ -27,15 +30,31 @@ func set_num_position():
     $Num.rect_position = Vector2(pos.x - size.x / 2, pos.y - size.y / 2)
 
 
-func animate_click():
-    if not animating:
-        # scale up front circle
-        if $FrontCircle.scale != $BackCircle.scale:
-            animating = true
-            $FrontCircleScaleTween.interpolate_property($FrontCircle, "scale", $FrontCircle.scale, $BackCircle.scale, 0.2, Tween.TRANS_QUINT, Tween.EASE_IN)
-            $FrontCircleScaleTween.start()
-            yield($FrontCircleScaleTween, "tween_completed")
-            animating = false
+func animate_scale_up(duration: float = 0.2):
+    if $FrontCircle.scale != _default_upscale:
+        $FrontCircleScaleTween.interpolate_property($FrontCircle, "scale", $FrontCircle.scale, _default_upscale, duration, Tween.TRANS_QUINT, Tween.EASE_IN)
+        $FrontCircleScaleTween.start()
+        yield($FrontCircleScaleTween, "tween_completed")
+        return
+    yield(get_tree(), "idle_frame")
+
+
+func animate_scale_down(duration: float = 0.2):
+    if $FrontCircle.scale != _default_downscale:
+        $FrontCircleScaleTween.interpolate_property($FrontCircle, "scale", $FrontCircle.scale, _default_downscale, duration, Tween.TRANS_QUINT, Tween.EASE_IN)
+        $FrontCircleScaleTween.start()
+        yield($FrontCircleScaleTween, "tween_completed")
+        return
+    yield(get_tree(), "idle_frame")
+
+
+func animate_move(new_pos: Vector2, duration: float = 0.15):
+    if self.position != new_pos:
+        $MoveTween.interpolate_property(self, "position", self.position, new_pos, duration, Tween.TRANS_QUINT, Tween.EASE_OUT)
+        $MoveTween.start()
+        yield($MoveTween, "tween_completed")
+        return
+    yield(get_tree(), "idle_frame")
 
 
 func _on_click_area_input_event(_viewport, event, _shape_idx):

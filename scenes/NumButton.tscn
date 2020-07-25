@@ -91,3 +91,5 @@ monitorable = false
 shape = SubResource( 11 )
 
 [node name="FrontCircleScaleTween" type="Tween" parent="."]
+
+[node name="MoveTween" type="Tween" parent="."]
