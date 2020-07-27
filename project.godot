@@ -22,6 +22,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Screen="*res://scripts/autoloaded/Screen.gd"
+Game="*res://scripts/autoloaded/Game.gd"
 
 [display]
 

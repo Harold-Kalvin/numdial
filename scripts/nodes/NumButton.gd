@@ -3,6 +3,7 @@ extends Node2D
 signal pressed
 
 var num = 0
+var already_pressed = false
 
 var _default_upscale
 var _default_downscale
@@ -32,6 +33,7 @@ func set_num_position():
 
 func animate_scale_up(duration: float = 0.2):
     if $FrontCircle.scale != _default_upscale:
+        already_pressed = true
         $FrontCircleScaleTween.interpolate_property($FrontCircle, "scale", $FrontCircle.scale, _default_upscale, duration, Tween.TRANS_QUINT, Tween.EASE_IN)
         $FrontCircleScaleTween.start()
         yield($FrontCircleScaleTween, "tween_completed")
@@ -41,6 +43,7 @@ func animate_scale_up(duration: float = 0.2):
 
 func animate_scale_down(duration: float = 0.2):
     if $FrontCircle.scale != _default_downscale:
+        already_pressed = false
         $FrontCircleScaleTween.interpolate_property($FrontCircle, "scale", $FrontCircle.scale, _default_downscale, duration, Tween.TRANS_QUINT, Tween.EASE_IN)
         $FrontCircleScaleTween.start()
         yield($FrontCircleScaleTween, "tween_completed")
@@ -48,7 +51,7 @@ func animate_scale_down(duration: float = 0.2):
     yield(get_tree(), "idle_frame")
 
 
-func animate_move(new_pos: Vector2, duration: float = 0.15):
+func animate_move(new_pos: Vector2, duration: float = 0.5):
     if self.position != new_pos:
         $MoveTween.interpolate_property(self, "position", self.position, new_pos, duration, Tween.TRANS_QUINT, Tween.EASE_OUT)
         $MoveTween.start()

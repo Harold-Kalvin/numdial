@@ -1,6 +1,7 @@
 extends Node2D
 
 onready var screen = $"/root/Screen"
+onready var game = $"/root/Game"
 
 const NUMBER_CHOICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const CIRCLE_RADIUS = 256
@@ -83,7 +84,6 @@ var gradients = {
 
 
 func _ready():
-    randomize()
     position = screen.main_block_position
     scaled_radius = screen.main_block_size.x / CIRCLE_PER_WIDTH
 
@@ -105,7 +105,17 @@ func init(total_buttons: int = 10):
         buttons.append(_create_button(number_choices[i], positions[i]))
 
 
+func animate_reset():
+    animating = true
+    var scale_duration = 0.2
+    for button in buttons:
+        button.animate_scale_down(scale_duration)
+    yield(get_tree().create_timer(scale_duration), "timeout")
+    animating = false
+
+
 func animate_shuffle(buttons_to_inject: int = 0):
+    animating = true
     var buttons_clone = [] + buttons
     var button_in_center = null
     var move_duration = 0.5
@@ -143,6 +153,7 @@ func animate_shuffle(buttons_to_inject: int = 0):
         buttons_clone[i].animate_move(new_positions[i], move_duration)
     yield(get_tree().create_timer(move_duration), "timeout")
     button_in_center.set_z_index(0)
+    animating = false
 
 
 func _inject_buttons(total: int, position: Vector2):
@@ -193,7 +204,10 @@ func _create_button(num, position):
 
 
 func _on_button_pressed(button):
-    if not animating:
+    if not button.already_pressed and not animating:
+        # animate button
         animating = true
         yield(button.animate_scale_up(), "completed")
         animating = false
+        # send signal
+        game.dial(button.num)
