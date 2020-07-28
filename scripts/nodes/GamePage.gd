@@ -7,6 +7,7 @@ func _ready():
     randomize()
     $NumButtons.init()
     set_new_objective()
+    game.connect("dial_succeded", self, "_on_dial_succeded")
     game.connect("succeded", self, "_on_succeded")
     game.connect("failed", self, "_on_failed")
     _temp_print_game_state("GAME START")
@@ -31,8 +32,13 @@ func _random_digits(num_digits: int = 4):
     return digits
 
 
+func _on_dial_succeded():
+    $NumButtons.animate_scale_up_on_last_button_pressed()
+
+
 func _on_succeded():
-    yield($NumButtons.animate_reset(), "completed")
+    yield($NumButtons.animate_scale_up_on_last_button_pressed(), "completed")
+    yield($NumButtons.animate_scale_down_on_all_buttons(), "completed")
     yield($NumButtons.animate_shuffle(), "completed")
     set_new_objective()
     game.increment_score()
@@ -40,7 +46,8 @@ func _on_succeded():
 
 
 func _on_failed():
-    yield($NumButtons.animate_reset(), "completed")
+    yield($NumButtons.animate_scale_up_on_last_button_pressed(), "completed")
+    yield($NumButtons.animate_scale_down_on_all_buttons(), "completed")
     yield($NumButtons.animate_shuffle(), "completed")
     set_new_objective()
     game.reset_score()
