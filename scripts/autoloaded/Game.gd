@@ -40,29 +40,29 @@ func increment_score():
     if _score >= _score_for_next_level:
         _score = 0
         _increment_level()
-    emit_signal("score_changed")
+    emit_signal("score_changed", _score)
 
 
 func reset_score():
     _score = 0
-    emit_signal("score_changed")
+    emit_signal("score_changed", _score)
 
 
 func set_score_for_next_level(new_score_for_next_level):
     if _score_for_next_level > 0:
         _score_for_next_level = new_score_for_next_level
-        emit_signal("score_for_next_level_changed")
+        emit_signal("score_for_next_level_changed", _score_for_next_level)
 
 
 func reset_level():
     _level = 1
-    emit_signal("level_changed")
+    emit_signal("level_changed", _level)
 
 
 func set_objective(new_objective):
     _objective = str(new_objective)
     _dialed_by_player = ""
-    emit_signal("objective_changed")
+    emit_signal("objective_changed", _objective)
 
 
 func dial(num):
@@ -82,5 +82,5 @@ func dial(num):
 
 func _increment_level():
     _level += 1
-    emit_signal("level_changed")
+    emit_signal("level_changed", _level)
         

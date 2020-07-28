@@ -6,11 +6,17 @@ onready var game = $"/root/Game"
 func _ready():
     randomize()
     $NumButtons.init()
-    set_new_objective()
+    prepare_game()
     game.connect("dial_succeded", self, "_on_dial_succeded")
     game.connect("succeded", self, "_on_succeded")
     game.connect("failed", self, "_on_failed")
-    _temp_print_game_state("GAME START")
+
+
+func prepare_game():
+    set_new_objective()
+    game.set_score_for_next_level(10)
+    game.reset_score()
+    game.reset_level()
 
 
 func set_new_objective():
@@ -42,7 +48,6 @@ func _on_succeded():
     yield($NumButtons.animate_shuffle(), "completed")
     set_new_objective()
     game.increment_score()
-    _temp_print_game_state("SUCCESS")
 
 
 func _on_failed():
@@ -52,13 +57,3 @@ func _on_failed():
     set_new_objective()
     game.reset_score()
     game.reset_level()
-    _temp_print_game_state("GAME OVER")
-
-
-func _temp_print_game_state(title):
-    print("\n-------------------------------------------")
-    print(title)
-    print("objective: ", game.get_objective())
-    print("score: ", game.get_score(), "/", game.get_score_for_next_level())
-    print("level: ", game.get_level())
-    print("-------------------------------------------\n")
