@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/nodes/HUD.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/BebasNeue-Regular.ttf" type="DynamicFontData" id=2]
@@ -31,6 +31,22 @@ size = 32
 extra_spacing_top = -10
 font_data = ExtResource( 3 )
 
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.337255, 0.913725, 0.956863, 1 )
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+shadow_color = Color( 0.337255, 0.913725, 0.956863, 0.392157 )
+shadow_size = 9
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+
 [node name="HUD" type="MarginContainer"]
 margin_right = 720.0
 margin_bottom = 420.0
@@ -53,16 +69,16 @@ mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 600.0
-margin_bottom = 285.0
+margin_bottom = 210.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
 [node name="ScoreContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
-margin_top = 110.0
+margin_top = 72.0
 margin_right = 148.0
-margin_bottom = 175.0
+margin_bottom = 137.0
 size_flags_horizontal = 3
 size_flags_vertical = 6
 
@@ -97,24 +113,24 @@ text = "/000"
 [node name="ObjectiveContainer" type="CenterContainer" parent="VBoxContainer/HBoxContainer"]
 margin_left = 152.0
 margin_right = 448.0
-margin_bottom = 285.0
+margin_bottom = 210.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
 [node name="Objective" type="Label" parent="VBoxContainer/HBoxContainer/ObjectiveContainer"]
 margin_left = 68.0
-margin_top = 82.0
+margin_top = 45.0
 margin_right = 228.0
-margin_bottom = 202.0
+margin_bottom = 165.0
 custom_fonts/font = SubResource( 4 )
 text = "0000"
 
 [node name="LevelContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 margin_left = 452.0
-margin_top = 110.0
+margin_top = 72.0
 margin_right = 600.0
-margin_bottom = 175.0
+margin_bottom = 137.0
 size_flags_horizontal = 3
 size_flags_vertical = 6
 
@@ -133,3 +149,24 @@ margin_bottom = 65.0
 custom_fonts/font = SubResource( 6 )
 text = "0"
 align = 2
+
+[node name="TimerContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 214.0
+margin_right = 600.0
+margin_bottom = 285.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TimerProgressBar" type="ProgressBar" parent="VBoxContainer/TimerContainer"]
+margin_top = 28.0
+margin_right = 600.0
+margin_bottom = 43.0
+rect_min_size = Vector2( 0, 15 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+custom_styles/fg = SubResource( 7 )
+custom_styles/bg = SubResource( 8 )
+value = 100.0
+percent_visible = false
