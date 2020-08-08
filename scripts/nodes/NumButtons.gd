@@ -15,8 +15,8 @@ var _num_button = preload("res://scenes/NumButton.tscn")
 var _scaled_radius
 var _positions = []
 var _shuffle_position = Vector2()
-var _animating = false
 var _last_button_pressed
+var _click_enabled = true
 var _color_for_number = {
     0: "pink",
     1: "red",
@@ -106,23 +106,18 @@ func init(total_buttons: int = 10):
 
 
 func animate_scale_up_on_last_button_pressed():
-    _animating = true
     yield(_last_button_pressed.animate_scale_up(), "completed")
-    _animating = false
     _last_button_pressed = null
 
 
 func animate_scale_down_on_all_buttons():
-    _animating = true
     var scale_duration = 0.2
     for button in buttons:
         button.animate_scale_down(scale_duration)
     yield(get_tree().create_timer(scale_duration + 0.05), "timeout")
-    _animating = false
 
 
 func animate_shuffle(buttons_to_inject: int = 0):
-    _animating = true
     var buttons_clone = [] + buttons
     var button_in_center = null
     var move_duration = 0.5
@@ -160,7 +155,14 @@ func animate_shuffle(buttons_to_inject: int = 0):
         buttons_clone[i].animate_move(new_positions[i], move_duration)
     yield(get_tree().create_timer(move_duration), "timeout")
     button_in_center.set_z_index(0)
-    _animating = false
+
+
+func enable_click():
+    _click_enabled = true
+
+
+func disable_click():
+    _click_enabled = false
 
 
 func _inject_buttons(total: int, position: Vector2):
@@ -211,6 +213,6 @@ func _create_button(num, position):
 
 
 func _on_button_pressed(button):
-    if not button.already_pressed and not _animating:
+    if not button.already_pressed and _click_enabled:
         _last_button_pressed = button
         game.dial(button.num)

@@ -56,9 +56,11 @@ func _on_dial_succeded():
 
 func _on_succeded():
     $Timer.set_paused(true)
+    $NumButtons.disable_click()
     yield($NumButtons.animate_scale_up_on_last_button_pressed(), "completed")
     yield($NumButtons.animate_scale_down_on_all_buttons(), "completed")
     yield($NumButtons.animate_shuffle(), "completed")
+    $NumButtons.enable_click()
     add_bonus_time()
     $Timer.set_paused(false)
     set_new_objective()
@@ -67,9 +69,11 @@ func _on_succeded():
 
 func _on_failed():
     $Timer.set_paused(true)
+    $NumButtons.disable_click()
     yield($NumButtons.animate_scale_up_on_last_button_pressed(), "completed")
     yield($NumButtons.animate_scale_down_on_all_buttons(), "completed")
     yield($NumButtons.animate_shuffle(), "completed")
+    $NumButtons.enable_click()
     $Timer.start()
     $Timer.set_paused(false)
     set_new_objective()
@@ -78,8 +82,10 @@ func _on_failed():
 
 
 func _on_timer_timeout():
+    $NumButtons.disable_click()
     yield($NumButtons.animate_scale_down_on_all_buttons(), "completed")
     yield($NumButtons.animate_shuffle(), "completed")
+    $NumButtons.enable_click()
     $Timer.start()
     set_new_objective()
     game.reset_score()
