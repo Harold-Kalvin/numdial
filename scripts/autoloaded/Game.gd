@@ -4,12 +4,12 @@ signal dial_succeded
 signal succeded
 signal failed
 signal score_changed
-signal score_for_next_level_changed
+signal max_score_changed
 signal level_changed
 signal objective_changed
 
 var _score = 0
-var _score_for_next_level = 10
+var _max_score = 10
 var _level = 1
 var _objective = ""
 var _dialed_by_player = ""
@@ -19,8 +19,8 @@ func get_score():
     return _score
 
 
-func get_score_for_next_level():
-    return _score_for_next_level
+func get_max_score():
+    return _max_score
 
 
 func get_level():
@@ -37,7 +37,7 @@ func get_dialed():
 
 func increment_score():
     _score += 1
-    if _score >= _score_for_next_level:
+    if _score >= _max_score:
         _score = 0
         _increment_level()
     emit_signal("score_changed", _score)
@@ -48,10 +48,10 @@ func reset_score():
     emit_signal("score_changed", _score)
 
 
-func set_score_for_next_level(new_score_for_next_level):
-    if _score_for_next_level > 0:
-        _score_for_next_level = new_score_for_next_level
-        emit_signal("score_for_next_level_changed", _score_for_next_level)
+func set_max_score(new_max_score):
+    if _max_score > 0:
+        _max_score = new_max_score
+        emit_signal("max_score_changed", _max_score)
 
 
 func reset_level():

@@ -21,7 +21,7 @@ func _ready():
 
 func prepare_game():
     set_new_objective()
-    game.set_score_for_next_level(10)
+    game.set_max_score(10)
     game.reset_score()
     game.reset_level()
 
