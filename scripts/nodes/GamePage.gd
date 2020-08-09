@@ -34,7 +34,7 @@ func set_next_game():
 
 func set_new_objective():
     var objective = ""
-    for i in _random_digits():
+    for i in _random_digits($NumButtons.get_number_choices()):
         objective += str(i)
     game.set_objective(objective)
 
@@ -44,8 +44,7 @@ func add_bonus_time():
     $Timer.set_wait_time(_default_wait_time)
 
 
-func _random_digits(num_digits: int = 4):
-    var choices = [] + $NumButtons.number_choices
+func _random_digits(choices: Array, num_digits: int = 4):
     var digits = []
     if num_digits > choices.size():
         num_digits = choices.size()

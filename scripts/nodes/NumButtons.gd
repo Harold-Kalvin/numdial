@@ -8,13 +8,12 @@ const CIRCLE_RADIUS = 256
 const CIRCLE_PER_WIDTH = 5
 const CIRCLE_OFFSET_FACTOR = 1.4
 
-var buttons = []
-var number_choices = []
-
 var _num_button = preload("res://scenes/NumButton.tscn")
-var _scaled_radius
+var _buttons = []
+var _displayed_buttons = []
 var _positions = []
 var _shuffle_position = Vector2()
+var _scaled_radius
 var _last_button_pressed
 var _click_enabled = true
 var _color_for_number = {
@@ -90,35 +89,71 @@ func _ready():
 
 func init(total_buttons: int = 10):
     _generate_all_positions()
+    add_buttons(total_buttons)
+    display_buttons()
 
-    # remove existing buttons
-    if buttons:
-        for button in buttons:
-            button.queue_free()
-        buttons.clear()
 
-    # create buttons
-    number_choices.clear()
-    number_choices += NUMBER_CHOICES.slice(0, total_buttons-1)
-    number_choices.shuffle()
-    for i in number_choices.size():
-        buttons.append(_create_button(number_choices[i], _positions[i]))
+func add_buttons(total: int, common_position: Vector2 = Vector2()):
+    """Adds new buttons to the list without displaying the corresponding nodes."""
+    if _buttons.size() + total <= NUMBER_CHOICES.size():
+        var numbers_to_add = NUMBER_CHOICES.slice(_buttons.size(), _buttons.size() - 1 + total)
+        for i in numbers_to_add.size():
+            var position = common_position if common_position else _positions[i]
+            _buttons.append(_create_button(numbers_to_add[i], position))
+
+
+func remove_buttons(total: int):
+    """Removes buttons from the list without freeing the corresponding nodes."""
+    if _buttons.size() - total > 0:
+        var numbers_to_remove = [] + NUMBER_CHOICES.slice(_buttons.size(), _buttons.size() - total, -1)
+        for i in range(_buttons.size() - 1, -1, -1):
+            if (_buttons[i].num in numbers_to_remove):
+                _buttons.remove(i)
+        
+
+func display_buttons():
+    """Displays the button nodes that are yet to be displayed."""
+    for button in _buttons:
+        if not (button in _displayed_buttons):
+            _displayed_buttons.append(button)
+            add_child(button)
+
+
+func free_buttons():
+    """Frees the button nodes that are yet to be freed."""
+    for i in range(_displayed_buttons.size() - 1, -1, -1):
+        if not (_displayed_buttons[i] in _buttons):
+            _displayed_buttons[i].queue_free()
+            _displayed_buttons.remove(i)
+
+
+func get_number_choices():
+    """Returns the current numbers."""
+    return NUMBER_CHOICES.slice(0, _buttons.size()-1)
+
+
+func get_shuffle_position():
+    """Returns the position where all the buttons reunites to shuffle."""
+    return _shuffle_position
 
 
 func animate_scale_up_on_last_button_pressed():
+    """Animates the scale up of the last button pressed."""
     yield(_last_button_pressed.animate_scale_up(), "completed")
     _last_button_pressed = null
 
 
 func animate_scale_down_on_all_buttons():
+    """Animates the scale down of all the buttons."""
     var scale_duration = 0.2
-    for button in buttons:
+    for button in _displayed_buttons:
         button.animate_scale_down(scale_duration)
     yield(get_tree().create_timer(scale_duration + 0.05), "timeout")
 
 
-func animate_shuffle(buttons_to_inject: int = 0):
-    var buttons_clone = [] + buttons
+func animate_shuffle():
+    """Animates the buttons shuffling."""
+    var buttons_clone = [] + _displayed_buttons
     var button_in_center = null
     var move_duration = 0.5
     var wait_before_new_position = 0.20
@@ -132,14 +167,20 @@ func animate_shuffle(buttons_to_inject: int = 0):
             button_in_center.set_z_index(1)
     yield(get_tree().create_timer(move_duration + wait_before_new_position), "timeout")
     
-    # inject new buttons if needed
-    if buttons_to_inject > 0:
-        _inject_buttons(buttons_to_inject, _shuffle_position)
+    # display or free buttons if needed
+    if _displayed_buttons.hash() != _buttons.hash():
+        var size_diff = _buttons.size() - _displayed_buttons.size()
+        if size_diff > 0:
+            display_buttons()
+        elif size_diff < 0:
+            free_buttons()
         buttons_clone.clear()
-        buttons_clone += buttons
+        buttons_clone += _displayed_buttons
+        if !(button_in_center in buttons_clone):
+            button_in_center = buttons_clone[0]
 
     # prepare new positions
-    var new_positions = [] + _positions.slice(0, buttons.size()-1)
+    var new_positions = [] + _positions.slice(0, _buttons.size()-1)
     new_positions.shuffle()
     
     # force button at the center to change position
@@ -158,21 +199,17 @@ func animate_shuffle(buttons_to_inject: int = 0):
 
 
 func enable_click():
+    """Enables the click on a button."""
     _click_enabled = true
-
-
+    
+    
 func disable_click():
+    """Disables the click on a button."""
     _click_enabled = false
 
 
-func _inject_buttons(total: int, position: Vector2):
-    if buttons.size() + total <= NUMBER_CHOICES.size():
-        var new_number_choices = NUMBER_CHOICES.slice(buttons.size(), buttons.size() - 1 + total)
-        for num in new_number_choices:
-            buttons.append(_create_button(num, position))
-
-
 func _generate_all_positions():
+    """Generates all the possible positions of a button."""
     var x_offset = _scaled_radius * CIRCLE_OFFSET_FACTOR
     var x_left = screen.main_block_size.x / 2 - x_offset
     var x_middle = screen.main_block_size.x / 2
@@ -195,20 +232,23 @@ func _generate_all_positions():
 
 
 func _create_button(num, position):
+    """Creates a button."""
     var button = _num_button.instance()
-    button.init(num)
+    button.num = num
     button.position = position
+
     # scale
     var scale_component = _scaled_radius / CIRCLE_RADIUS
     button.set_scale(Vector2(scale_component, scale_component))
+
     # set color corresponding to the number
     var color = _color_for_number[num]
     button.get_node("BackCircle").material.set_shader_param("gradient", _gradients[color][1])
     button.get_node("MiddleCircle").material.set_shader_param("gradient", _gradients[color][2])
     button.get_node("FrontCircle").material.set_shader_param("gradient", _gradients[color][3])
+    
     # signal
     button.connect("pressed", self, "_on_button_pressed")
-    add_child(button)
     return button
 
 

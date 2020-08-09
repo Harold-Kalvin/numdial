@@ -13,22 +13,14 @@ func _ready():
     $ClickArea.connect("input_event", self, "_on_click_area_input_event")
     _default_upscale = $BackCircle.scale
     _default_downscale = $FrontCircle.scale
-    set_num()
-    set_num_position()
-
-
-func init(num_arg):
-    num = num_arg
-
-
-func set_num():
+    
+    # set text
     $Num.text = str(num)
 
-
-func set_num_position():
+    # center text
     var size = $Num.get_combined_minimum_size()
     var pos = $Num.rect_position
-    $Num.rect_position = Vector2(pos.x - size.x / 2, pos.y - size.y / 2)
+    $Num.rect_position = Vector2(pos.x - size.x / 2, pos.y - size.y / 2)    
 
 
 func animate_scale_up(duration: float = 0.2):
