@@ -127,6 +127,11 @@ func free_buttons():
             _displayed_buttons.remove(i)
 
 
+func get_total():
+    """Returns the current number of buttons."""
+    return _buttons.size()
+
+
 func get_number_choices():
     """Returns the current numbers."""
     return NUMBER_CHOICES.slice(0, _buttons.size()-1)
