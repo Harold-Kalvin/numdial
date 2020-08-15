@@ -35,6 +35,7 @@ func _ready():
     
     # set game variables (objective, level, score)
     reset_game()
+    notify_game_changed()
 
     # connect game signals
     game.connect("dial_succeded", self, "_on_dial_succeded")
@@ -81,6 +82,13 @@ func set_new_objective():
     game.set_objective(objective)
 
 
+func notify_game_changed():
+    game.emit_score_changed()
+    game.emit_max_score_changed()
+    game.emit_level_changed()
+    game.emit_objective_changed()
+
+
 func add_bonus_time():
     $Timer.start(clamp($Timer.time_left + BONUS_TIME_SEC, 0, $Timer.wait_time))
     $Timer.set_wait_time(_default_wait_time)
@@ -123,6 +131,7 @@ func _on_dial_succeded():
 
 
 func _on_succeded():
+    # set game variables (score, objective etc.)
     set_next_game()
 
     # run animations and add bonus time on timer
@@ -133,8 +142,12 @@ func _on_succeded():
     $NumButtons.enable_click()
     add_bonus_time()
 
+    # emit game signals (score, objective etc.)
+    notify_game_changed()
+
 
 func _on_failed():
+    # set game variables (score, objective etc.)
     reset_game()
 
     # run animations and reset timer
@@ -145,8 +158,12 @@ func _on_failed():
     $NumButtons.enable_click()
     $Timer.start()
 
+    # emit game signals (score, objective etc.)
+    notify_game_changed()
+
 
 func _on_timer_timeout():
+    # set game variables (score, objective etc.)
     reset_game()
 
     # run animations and reset timer
@@ -155,3 +172,6 @@ func _on_timer_timeout():
     yield($NumButtons.animate_shuffle(), "completed")
     $NumButtons.enable_click()
     $Timer.start()
+
+    # emit game signals (score, objective etc.)
+    notify_game_changed()
