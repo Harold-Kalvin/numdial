@@ -126,28 +126,24 @@ func _on_succeded():
     set_next_game()
 
     # run animations and add bonus time on timer
-    $Timer.set_paused(true)
     $NumButtons.disable_click()
     yield($NumButtons.animate_scale_up_on_last_button_pressed(), "completed")
     yield($NumButtons.animate_scale_down_on_all_buttons(), "completed")
     yield($NumButtons.animate_shuffle(), "completed")
     $NumButtons.enable_click()
     add_bonus_time()
-    $Timer.set_paused(false)
 
 
 func _on_failed():
     reset_game()
 
     # run animations and reset timer
-    $Timer.set_paused(true)
     $NumButtons.disable_click()
     yield($NumButtons.animate_scale_up_on_last_button_pressed(), "completed")
     yield($NumButtons.animate_scale_down_on_all_buttons(), "completed")
     yield($NumButtons.animate_shuffle(), "completed")
     $NumButtons.enable_click()
     $Timer.start()
-    $Timer.set_paused(false)
 
 
 func _on_timer_timeout():
