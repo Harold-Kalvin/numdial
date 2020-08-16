@@ -3,9 +3,8 @@ extends MarginContainer
 onready var screen = $"/root/Screen"
 onready var game = $"/root/Game"
 onready var timer = $"../Timer"
-onready var score = $VBoxContainer/HBoxContainer/ScoreContainer/Score/ScoreCurrent
-onready var max_score = $VBoxContainer/HBoxContainer/ScoreContainer/Score/ScoreMax
-onready var level = $VBoxContainer/HBoxContainer/LevelContainer/Level
+onready var score = $VBoxContainer/HBoxContainer/ScoreContainer/Score
+onready var best_score = $VBoxContainer/HBoxContainer/BestScoreContainer/BestScore
 onready var objective = $VBoxContainer/HBoxContainer/ObjectiveContainer/Objective
 onready var progress_bar = $VBoxContainer/TimerContainer/TimerProgressBar
 
@@ -24,12 +23,11 @@ func _ready():
 
     # connect game signals
     game.connect("score_changed", self, "_on_score_changed")
-    game.connect("max_score_changed", self, "_on_max_score_changed")
-    game.connect("level_changed", self, "_on_level_changed")
+    game.connect("best_score_changed", self, "_on_best_score_changed")
     game.connect("objective_changed", self, "_on_objective_changed")
     game.connect("dial_succeded", self, "_on_dial_succeded")
 
-    # align objective (RichTextLabel) 
+    # align objective (RichTextLabel)
     yield(get_tree(), "idle_frame")
     _align_objective()
 
@@ -46,12 +44,8 @@ func _on_score_changed(new_score):
     score.text = str(new_score).pad_zeros(3)
 
 
-func _on_max_score_changed(new_max_score):
-    max_score.text = "/"+str(new_max_score).pad_zeros(3)
-
-
-func _on_level_changed(new_level):
-    level.text = str(new_level)
+func _on_best_score_changed(new_best_score):
+    best_score.text = str(new_best_score)
 
 
 func _on_objective_changed(new_objective):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/nodes/HUD.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/BebasNeue-Regular.ttf" type="DynamicFontData" id=2]
@@ -10,11 +10,6 @@ font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 32
-extra_spacing_top = -10
-font_data = ExtResource( 3 )
-
-[sub_resource type="DynamicFont" id=3]
-size = 30
 extra_spacing_top = -10
 font_data = ExtResource( 3 )
 
@@ -89,26 +84,12 @@ custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 1, 1, 1, 0.501961 )
 text = "SCORE"
 
-[node name="Score" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ScoreContainer"]
+[node name="Score" type="Label" parent="VBoxContainer/HBoxContainer/ScoreContainer"]
 margin_top = 30.0
 margin_right = 148.0
 margin_bottom = 65.0
-custom_constants/separation = 6
-
-[node name="ScoreCurrent" type="Label" parent="VBoxContainer/HBoxContainer/ScoreContainer/Score"]
-margin_right = 54.0
-margin_bottom = 35.0
 custom_fonts/font = SubResource( 2 )
 text = "000"
-
-[node name="ScoreMax" type="Label" parent="VBoxContainer/HBoxContainer/ScoreContainer/Score"]
-margin_left = 60.0
-margin_top = 1.0
-margin_right = 121.0
-margin_bottom = 33.0
-custom_fonts/font = SubResource( 3 )
-custom_colors/font_color = Color( 1, 1, 1, 0.501961 )
-text = "/000"
 
 [node name="ObjectiveContainer" type="CenterContainer" parent="VBoxContainer/HBoxContainer"]
 margin_left = 152.0
@@ -132,7 +113,7 @@ text = "00"
 scroll_active = false
 custom_effects = [ null ]
 
-[node name="LevelContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="BestScoreContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 margin_left = 452.0
 margin_top = 72.0
 margin_right = 600.0
@@ -140,15 +121,15 @@ margin_bottom = 137.0
 size_flags_horizontal = 3
 size_flags_vertical = 6
 
-[node name="LevelLabel" type="Label" parent="VBoxContainer/HBoxContainer/LevelContainer"]
+[node name="BestScoreLabel" type="Label" parent="VBoxContainer/HBoxContainer/BestScoreContainer"]
 margin_right = 148.0
 margin_bottom = 26.0
 custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 1, 1, 1, 0.501961 )
-text = "LEVEL"
+text = "BEST SCORE"
 align = 2
 
-[node name="Level" type="Label" parent="VBoxContainer/HBoxContainer/LevelContainer"]
+[node name="BestScore" type="Label" parent="VBoxContainer/HBoxContainer/BestScoreContainer"]
 margin_top = 30.0
 margin_right = 148.0
 margin_bottom = 65.0

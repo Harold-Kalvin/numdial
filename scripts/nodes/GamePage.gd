@@ -9,8 +9,8 @@ const TOTAL_BUTTONS_PROGRESSION = {
     1: 8,
     2: 10,
 }
-const MAX_SCORE_PROGRESSION_LEVELS = [2, 3]
-const MAX_SCORE_PROGRESSION = {
+const NEEDED_STREAK_PROGRESSION_LEVELS = [2, 3]
+const NEEDED_STREAK_PROGRESSION = {
     0: 3,
     1: 4,
     2: 5,
@@ -48,7 +48,7 @@ func _ready():
 
 
 func reset_game():
-    game.set_max_score(get_current_max_score())
+    game.set_needed_streak(get_current_needed_streak())
     game.reset_score()
     game.reset_level()
 
@@ -61,7 +61,7 @@ func reset_game():
 
 
 func set_next_game():
-    game.set_max_score(get_current_max_score())
+    game.set_needed_streak(get_current_needed_streak())
     game.increment_score()
     
     # after setting next level, update list of buttons if needed
@@ -83,8 +83,7 @@ func set_new_objective():
 
 func notify_game_changed():
     game.emit_score_changed()
-    game.emit_max_score_changed()
-    game.emit_level_changed()
+    game.emit_best_score_changed()
     game.emit_objective_changed()
 
 
@@ -97,8 +96,8 @@ func get_current_total_buttons():
     return TOTAL_BUTTONS_PROGRESSION[_get_current_progression(TOTAL_BUTTONS_PROGRESSION_LEVELS)]
 
 
-func get_current_max_score():
-    return MAX_SCORE_PROGRESSION[_get_current_progression(MAX_SCORE_PROGRESSION_LEVELS)]
+func get_current_needed_streak():
+    return NEEDED_STREAK_PROGRESSION[_get_current_progression(NEEDED_STREAK_PROGRESSION_LEVELS)]
 
 
 func get_current_objective_numbers():
