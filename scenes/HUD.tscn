@@ -18,7 +18,7 @@ size = 30
 extra_spacing_top = -10
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=9]
 size = 100
 font_data = ExtResource( 2 )
 
@@ -118,13 +118,19 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Objective" type="Label" parent="VBoxContainer/HBoxContainer/ObjectiveContainer"]
-margin_left = 68.0
-margin_top = 45.0
-margin_right = 228.0
-margin_bottom = 165.0
-custom_fonts/font = SubResource( 4 )
-text = "0000"
+[node name="Objective" type="RichTextLabel" parent="VBoxContainer/HBoxContainer/ObjectiveContainer"]
+margin_left = 108.0
+margin_top = 44.0
+margin_right = 188.0
+margin_bottom = 164.0
+rect_min_size = Vector2( 80, 120 )
+rect_clip_content = false
+custom_fonts/normal_font = SubResource( 9 )
+bbcode_enabled = true
+bbcode_text = "00"
+text = "00"
+scroll_active = false
+custom_effects = [ null ]
 
 [node name="LevelContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 margin_left = 452.0
