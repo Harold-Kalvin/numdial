@@ -3,25 +3,24 @@ extends Node2D
 onready var game = $"/root/Game"
 
 const BONUS_TIME_SEC = 5.0
-const TOTAL_BUTTONS_PROGRESSION_LEVELS = [5, 10]
+const TOTAL_BUTTONS_PROGRESSION_LEVELS = [2, 3]
 const TOTAL_BUTTONS_PROGRESSION = {
     0: 4,
     1: 8,
     2: 10,
 }
-const MAX_SCORE_PROGRESSION_LEVELS = [10, 20]
+const MAX_SCORE_PROGRESSION_LEVELS = [2, 3]
 const MAX_SCORE_PROGRESSION = {
-    0: 10,
-    1: 15,
-    2: 20,
+    0: 3,
+    1: 4,
+    2: 5,
 }
-const OBJECTIVE_NUMBERS_PROGRESSION_LEVELS = [5, 10, 15, 20]
+const OBJECTIVE_NUMBERS_PROGRESSION_LEVELS = [2, 3, 4]
 const OBJECTIVE_NUMBERS_PROGRESSION = {
     0: {"min": 2, "max": 2},
-    1: {"min": 2, "max": 3},
-    2: {"min": 3, "max": 3},
-    3: {"min": 3, "max": 4},
-    4: {"min": 4, "max": 5},
+    1: {"min": 2, "max": 4},
+    2: {"min": 3, "max": 5},
+    3: {"min": 4, "max": 6},
 }
 
 var _default_wait_time
