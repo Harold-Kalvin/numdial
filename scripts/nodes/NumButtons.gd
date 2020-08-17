@@ -160,17 +160,23 @@ func animate_shuffle():
     """Animates the buttons shuffling."""
     var buttons_clone = [] + _displayed_buttons
     var button_in_center = null
-    var move_duration = 0.5
+    var move_duration = 0.25
     var wait_before_new_position = 0.20
     
     # move all buttons at the same position
-    for button in buttons_clone:
-        button.animate_move(_shuffle_position, move_duration)
+    var last_button = null
+    for i in range(buttons_clone.size() - 1, -1, -1):
+        var button = buttons_clone[i]
         # button at the center must be at the top of the button pile
         if _shuffle_position == button.position:
             button_in_center = button
             button_in_center.set_z_index(1)
-    yield(get_tree().create_timer(move_duration + wait_before_new_position), "timeout")
+        else:
+            if last_button:
+                button.animate_move(_shuffle_position, move_duration)
+            else:
+                last_button = button
+    yield(last_button.animate_move(_shuffle_position, move_duration), "completed")
     
     # display or free buttons if needed
     if _displayed_buttons.hash() != _buttons.hash():
@@ -183,6 +189,7 @@ func animate_shuffle():
         buttons_clone += _displayed_buttons
         if !(button_in_center in buttons_clone):
             button_in_center = buttons_clone[0]
+    yield(get_tree().create_timer(wait_before_new_position), "timeout")
 
     # prepare new positions
     var new_positions = [] + _positions.slice(0, _buttons.size()-1)
@@ -197,9 +204,13 @@ func animate_shuffle():
             break
 
     # move all other buttons to their new position
+    last_button = buttons_clone.pop_back()
+    var last_position = new_positions.pop_back()
     for i in buttons_clone.size():
         buttons_clone[i].animate_move(new_positions[i], move_duration)
-    yield(get_tree().create_timer(move_duration), "timeout")
+    yield(last_button.animate_move(last_position, move_duration), "completed")
+    
+    # button at the center must be at the top of the button pile
     button_in_center.set_z_index(0)
 
 
